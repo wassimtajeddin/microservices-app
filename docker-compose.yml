@@ -1,6 +1,7 @@
 services:
   mysql-user:
     image: mysql:8.0
+    container_name: mysql-user
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: user_db
@@ -11,6 +12,7 @@ services:
 
   mysql-order:
     image: mysql:8.0
+    container_name: mysql-order
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: order_db
@@ -21,19 +23,51 @@ services:
 
   discovery-server:
     build: ./discovery-server
+    container_name: discovery-server
     ports:
       - "8762:8762"
     networks:
       - microservices-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
 
   api-gateway:
     build: ./api-gateway
+    container_name: api-gateway
     ports:
       - "8080:8080"
     depends_on:
       - discovery-server
     networks:
       - microservices-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql-user
+      - discovery-server
+    networks:
+      - microservices-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql-order
+      - discovery-server
+    networks:
+      - microservices-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
 
 networks:
   microservices-net:
