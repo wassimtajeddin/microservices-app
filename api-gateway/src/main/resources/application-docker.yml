@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: api-gateway
+
   cloud:
     gateway:
       discovery:
@@ -18,8 +19,3 @@ spring:
           uri: lb://order-service
           predicates:
             - Path=/orders/**
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://discovery-server:8762/eureka/
