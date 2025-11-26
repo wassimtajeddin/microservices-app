@@ -13,7 +13,7 @@ services:
   discovery-server:
     build: ./discovery-server
     ports:
-      - "8761:8761"
+      - "8762:8762"
     networks:
       - microservices-net
 
