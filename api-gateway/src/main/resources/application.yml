@@ -1,5 +1,6 @@
 server:
   port: 8080
+  address: 0.0.0.0
 
 spring:
   application:
@@ -14,13 +15,16 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/api/users/**
+            - Path=/users/**
         - id: order-service
           uri: lb://order-service
           predicates:
-            - Path=/api/orders/**
+            - Path=/orders/**
 
 eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: 0.0.0.0
   client:
     service-url:
       defaultZone: http://localhost:8762/eureka/
